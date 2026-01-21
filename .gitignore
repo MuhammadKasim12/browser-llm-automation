@@ -1,0 +1,51 @@
+# Environment files with credentials - NEVER commit these
+.env
+.env.local
+.env.*.local
+
+# Browser session data (contains login cookies)
+.browser_data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Output files (optional - remove if you want to track)
+output/
+screenshots/
+
+# OS
+.DS_Store
+Thumbs.db
+
