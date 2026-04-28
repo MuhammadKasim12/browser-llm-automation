@@ -6,9 +6,11 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-# Vercel-friendly defaults (env vars set in Vercel dashboard win via setdefault)
+# Vercel-friendly defaults (env vars set in Vercel dashboard win via setdefault).
+# Prefer Groq so we get the 70B model that follows multi-step prompts. Do NOT
+# set LLM_MODEL here — each provider has its own correct default in LLM_PROVIDERS,
+# and a stale LLM_MODEL silently downgrades Groq to 8B or sends an invalid name.
 os.environ.setdefault("LLM_PROVIDER", "groq")
-os.environ.setdefault("LLM_MODEL", "llama-3.1-8b-instant")
 
 # Make sibling modules in api/ importable
 sys.path.insert(0, os.path.dirname(__file__))
