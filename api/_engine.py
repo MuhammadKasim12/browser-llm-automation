@@ -217,13 +217,17 @@ _MONTH_MAP = {m: i for i, m in enumerate(
 _MONTH_ABBR = {v: k.title() for k, v in _MONTH_MAP.items()}
 
 
+_PRESENT_SENTINELS = ("present", "current", "till date", "till now",
+                      "now", "today", "ongoing")
+
+
 def _parse_date(date_str: str) -> datetime:
     if not date_str:
         return datetime.min
     s = date_str.strip().lower()
-    if s in ("present", "current"):
+    if s in _PRESENT_SENTINELS:
         return datetime.max
-    m = re.match(r"([a-z]{3})\s*(\d{4})", s)
+    m = re.match(r"([a-z]{3,9})\s*(\d{4})", s)
     if m:
         return datetime(int(m.group(2)), _MONTH_MAP.get(m.group(1)[:3], 1), 1)
     m = re.match(r"(\d{4})-(\d{2})-(\d{2})", s)
@@ -242,9 +246,12 @@ def _normalize_single(date_str: str) -> str:
     if not date_str:
         return ""
     s = date_str.strip()
-    if s.lower() in ("present", "current"):
+    if s.lower() in _PRESENT_SENTINELS:
         return "Present"
-    if re.match(r"^[A-Za-z]{3}\s+\d{4}$", s):
+    if re.match(r"^[A-Za-z]{3,9}\s+\d{4}$", s):
+        parsed = _parse_date(s)
+        if parsed not in (datetime.min, datetime.max):
+            return f"{_MONTH_ABBR[parsed.month]} {parsed.year}"
         return s.title()
     parsed = _parse_date(s)
     if parsed in (datetime.min, datetime.max):
@@ -389,7 +396,10 @@ def _build_pdf_story(data: dict):
     story.append(Paragraph("PROFESSIONAL EXPERIENCE", section_style))
     for job in data.get("experience", []) or []:
         story.append(Paragraph(f"<b>{job.get('title','')}</b> | {job.get('dates','')}", exp_title_style))
-        story.append(Paragraph(f"{job.get('company','')} - {job.get('location','')}", company_style))
+        company = job.get('company', '')
+        location = job.get('location', '')
+        company_line = f"{company} - {location}" if location else company
+        story.append(Paragraph(company_line, company_style))
         for point in job.get("points", []) or []:
             story.append(Paragraph(f"• {point}", bullet_style))
         story.append(Spacer(1, 6))

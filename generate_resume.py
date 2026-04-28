@@ -379,14 +379,17 @@ def sort_experience_by_date(experience_list: list) -> list:
         7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'
     }
 
+    present_sentinels = ('present', 'current', 'till date', 'till now',
+                         'now', 'today', 'ongoing')
+
     def parse_date(date_str: str) -> datetime:
         if not date_str:
             return datetime.min
         date_str = date_str.strip().lower()
-        if date_str in ['present', 'current']:
+        if date_str in present_sentinels:
             return datetime.max
-        # Match "MMM YYYY" format (e.g., "Sep 2022")
-        match = re.match(r'([a-z]{3})\s*(\d{4})', date_str)
+        # Match "MMM YYYY" or longer month names (e.g., "Sep 2022", "Sept 2024", "September 2024")
+        match = re.match(r'([a-z]{3,9})\s*(\d{4})', date_str)
         if match:
             month_str, year_str = match.groups()
             return datetime(int(year_str), month_map.get(month_str[:3], 1), 1)
@@ -412,11 +415,14 @@ def sort_experience_by_date(experience_list: list) -> list:
             return ""
         date_str = date_str.strip()
         lower_str = date_str.lower()
-        if lower_str in ['present', 'current']:
+        if lower_str in present_sentinels:
             return 'Present'
-        # Already in correct format? (MMM YYYY)
-        if re.match(r'^[A-Za-z]{3}\s+\d{4}$', date_str):
-            return date_str.title()  # Ensure proper casing
+        # Already in correct format? (MMM YYYY) or longer month name (e.g., "Sept 2024")
+        if re.match(r'^[A-Za-z]{3,9}\s+\d{4}$', date_str):
+            parsed = parse_date(date_str)
+            if parsed not in (datetime.min, datetime.max):
+                return f"{month_abbrev[parsed.month]} {parsed.year}"
+            return date_str.title()
         # Parse and reformat
         parsed = parse_date(date_str)
         if parsed == datetime.min:
@@ -511,14 +517,24 @@ def generate_pdf(data: dict, output_path: str):
     story.append(Paragraph(data.get('summary', ''), body_style))
 
     story.append(Paragraph('TECHNICAL SKILLS', section_style))
-    for category, skills in data.get('skills', {}).items():
-        skills_text = ', '.join(str(s) for s in skills) if isinstance(skills, list) else skills
+    skills_data = data.get('skills') or {}
+    if isinstance(skills_data, dict):
+        skills_items = skills_data.items()
+    elif isinstance(skills_data, list):
+        skills_items = [('Skills', skills_data)]
+    else:
+        skills_items = [('Skills', str(skills_data))]
+    for category, skills in skills_items:
+        skills_text = ', '.join(str(s) for s in skills) if isinstance(skills, list) else str(skills)
         story.append(Paragraph(f"<b>{category}:</b> {skills_text}", body_style))
 
     story.append(Paragraph('PROFESSIONAL EXPERIENCE', section_style))
     for job in data.get('experience', []):
         story.append(Paragraph(f"<b>{job.get('title', '')}</b> | {job.get('dates', '')}", exp_title_style))
-        story.append(Paragraph(f"{job.get('company', '')} - {job.get('location', '')}", company_style))
+        company = job.get('company', '')
+        location = job.get('location', '')
+        company_line = f"{company} - {location}" if location else company
+        story.append(Paragraph(company_line, company_style))
         for point in job.get('points', []):
             story.append(Paragraph(f"• {point}", bullet_style))
         story.append(Spacer(1, 6))
