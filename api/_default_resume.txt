@@ -1,0 +1,388 @@
+Muhammad Kasim Naina Mohammed
+Accomplished Test Automation Specialist |Expert in UI/API Frameworks | Proficient in Java, Python, and JavaScript
+| Expertise in Cloud & DevOps with AWS, MySQL, and Big Data Technologies
+12499 Scully Avenue, #B5107714493MUHAMMADKASIM@GMAIL.COM
+muhammadkasim@gmail.com muhammadkasim@gmail.com
+Summary
+Accomplished Java Full Stack Developer with 13+ years of experience in designing, building, and deploying
+enterprise-grade web applications and microservices. Expertise in Java, Spring Boot, React, AWS, and Kubernetes.
+Proven ability to deliver high-performance systems using modern DevOps pipelines (CI/CD, Jenkins, Docker),
+Kafka-based event-driven architecture, and cloud-native solutions on AWS (EKS, Aurora, DynamoDB).
+Formerly worked for Barclays on real-time trading systems, and consistently led projects end-to-end, from
+development to testing and production support. Strong in Agile, Git, and team collaboration across globally
+distributed teams.
+Experience
+Citi(Contract)
+Module Lead
+SF Bay area
+Oct-2024-Till Date
+Led a cross-functional module team in the development and end-to-end testing of scalable microservices
+using Spring Boot, ensuring on-time delivery of high-quality software components.
+• Owned and delivered key testing modules for complex financial workflows, aligning QA strategies with overall
+product objectives and Agile milestones.
+• Designed and built robust automation frameworks in Java, Python, and JavaScript, increasing test coverage
+and reducing regression testing time by 40%.
+• Championed the integration of Apache Kafka for real-time event-driven testing and message validation,
+enhancing test data reliability across distributed systems.
+• Established and maintained CI/CD pipelines using Jenkins, GitLab CI, and Docker, enabling faster and
+consistent delivery with reduced manual intervention.
+• Performed full-stack testing including API, UI, and database validation using Selenium, Cypress, TestNG, and
+Postman, contributing to a 99% defect-free production rate.
+• Collaborated with developers and architects to shift testing left, incorporating automated test hooks and
+contract testing early in the SDLC.
+• Introduced AI-driven solutions for test automation—leveraging NLP-based models to convert user stories into
+executable test cases, reducing manual scripting by 60%.
+• Implemented AI/ML models to analyze Swagger/OpenAPI definitions and auto-generate API test suites,
+improving API test accuracy and coverage.
+• Mentored junior SDETs and testers in automation best practices, code quality, and CI/CD integration,
+fostering a culture of quality and ownership.
+LPL Financial(Contract)
+Lead Software Engineer
+SF Bay area
+Oct-2023-Sept-2024
+Spearheaded the development and testing of microservices using Spring Boot, significantly improving system
+scalability and performance.
+Architected and implemented automation frameworks using Java, Python, and JavaScript, enhancing test
+efficiency by 40%.
+Integrated Kafka for real-time data processing and messaging, ensuring reliable and efficient system
+communication.
+Developed and maintained CI/CD pipelines with Jenkins and Docker, resulting in a 50% faster deployment
+cycle.
+Conducted comprehensive functional, integration, and regression testing using Selenium, Cypress, and
+TestNG, achieving a 99% defect-free release rate.
+Leveraged AI/ML to automate test script generation based on user prompts, significantly reducing manual
+effort.
+Applied AI/ML algorithms to analyze UI and API contracts, automatically generating API tests and enhancing
+test coverage and accuracy.
+Amazon
+Senior Software Engineer
+2022-09-17 -2023-10-31
+Designed and developed high-throughput backend frameworks using Java EE, Spring, and Spring Boot,
+optimizing microservices for handling millions of daily transactions.
+Built and maintained frontend testing utilities to validate data visualization and dashboard consistency across
+modern browsers, ensuring end-to-end quality.
+Developed and optimized tools for functional, integration, and system testing, driving improvements in
+application performance and stability.
+Upgraded automation and development tools to support multiple JDK versions and evolving AWS SDKs,
+ensuring compatibility across environments.
+Integrated with AWS-based infrastructure and services such as S3, Lambda, and CloudWatch to monitor test
+pipelines and application metrics.
+Worked with distributed systems and managed large-scale data ingestion and validation workflows using
+Hadoop, HDFS, and Hive, supporting backend and reporting layers.
+Collaborated cross-functionally with frontend developers, backend engineers, and DevOps teams to ensure
+seamless deployment and validation through CI/CD pipelines.
+Contributed to open-source libraries like Apache Commons and TestNG, improving internal toolsets and
+enabling reusable utility functions for full stack validation.
+Tusimple
+Senior Software Engineer
+2022-03-15 - 2022-09-17
+Developed and optimized full-stack test automation frameworks using Cucumber/Gherkins, enhancing
+collaboration between frontend/backend teams and improving test efficiency by 45%.
+Automated both browser-based UI tests (Selenium, Cypress) and REST API validations, ensuring seamless
+integration across frontend and backend modules.
+Implemented end-to-end CI/CD pipelines with Jenkins and Docker, enabling automated builds, deployments,
+and validations across staging and production environments.
+Integrated Apache Kafka for real-time messaging and data pipeline validation, ensuring reliable
+communication between distributed services and microservices.
+Participated in Agile sprints, collaborating closely with developers to identify integration gaps and improve
+feature delivery confidence.
+Mentored junior engineers in test architecture, CI/CD integration, and coding best practices, fostering a strong
+engineering culture of quality and automation.
+Proofpoint Inc
+Senior Software Engineer
+Aug 2021 - Mar 2022
+Contributed to the design and development of cloud-native enterprise applications, ensuring robust
+integration across frontend, backend, and distributed data platforms.
+Developed modular components and microservices using Java, and built interactive UI components using
+JavaScript, enabling seamless user experience and backend connectivity.
+Created CLI tools and services using Shell Scripting to manage and orchestrate job pipelines, improving
+developer efficiency and operational automation.
+Engineered large-scale data validation and transformation pipelines using Apache Spark and Scala, ensuring
+reliability in real-time data processing and reporting workflows.
+Integrated application services with cloud infrastructure and CI/CD pipelines, supporting continuous
+deployment with version-controlled releases and rollback strategies.
+Collaborated in Agile teams to deliver cross-functional features, participating in design discussions, sprint
+planning, and production release activities.
+Enhanced system scalability and performance by analyzing backend logs, optimizing service interactions, and
+improving API response times.
+Ancestry(Contract)
+Senior Software Engineer
+San Francisco, CA ·
+(January 2019 - March 2020)
+Contributed to development efforts on the Platform-API team, contributing to the migration of core services to
+AWS-ECS and EKS, enhancing system reliability and scalability.
+Developed backend microservices and RESTful APIs using Java and RxJava, integrating them with DynamoDB
+for persistent data management.
+Built robust CI/CD pipelines for development, staging, and production environments using Shell scripting and
+automation tools, enabling one-click deployments.
+Engineered reusable service components and utility libraries with JUnit, TestNG, and custom Java
+frameworks, improving developer productivity and service testability.
+Collaborated closely with product and UI/UX teams to align feature requirements with backend architecture,
+ensuring functional integrity across frontend and backend layers.
+Implemented full-stack regression and integration validation across various platforms using both automated
+service hooks and performance benchmarking tools.
+Leveraged Git for version control and branching strategies, streamlining multi-team collaboration in Agile
+delivery cycles.
+Participated in root cause analysis and system failure investigations, delivering high-quality service patches
+and hotfixes across multiple production environments.
+Contributed to performance optimization efforts and end-to-end reliability improvements, resulting in
+smoother user experiences across Ancestry’s digital products.
+Intuit(Contract)
+Software Development Engineer in Test
+Jan-2019
+Jan-2014
+Led the design and implementation of a state-of-the-art test automation framework using Java/
+Reflection mechanism, facilitating Excel spreadsheet-based automation.
+Developed a user-friendly interface for test case management, execution, and reporting, enhancing
+testing efficiency and effectiveness.
+Developed and executed test automation using Java and Appium for iOS and Android, significantly
+improving test coverage and efficiency.
+Collaborated with stakeholders to gather requirements, design the framework architecture, and ensure
+alignment with business objectives.
+Conducted thorough testing and validation of the framework to ensure reliability, scalability, and
+maintainability under diverse testing scenarios.
+Played a pivotal role in containerizing the QuickBooks application, enabling seamless deployment,
+scaling, and management of application components.
+Designed and implemented container orchestration solutions using Docker and Kubernetes, optimizing
+resource utilization and enhancing system scalability and resilience.
+Provided technical leadership and guidance to teams throughout the migration process, fostering a
+smooth transition and minimizing disruptions to business operations.
+Barclays Financial Corporation
+SDET
+Pune, India
+SDET(November 2012 - December 2013)
+Designed and developed a custom Domain-Specific Language (DSL) Framework to support trading operations
+and streamline integration with Tibco-based messaging systems.
+Engineered backend service components in Java, implementing a fluent interface using method chaining for
+modular, readable, and testable code.
+Built structured data logging systems using XML, enabling real-time traceability and debugging of multi-stage
+processing flows in financial trade executions.
+Developed reusable service modules to intercept and validate Tibco protocol messages, improving
+transparency and reliability in trading pipelines.
+Automated repetitive and critical backend operations to enhance coverage and reduce operational overhead
+for trading infrastructure.
+Collaborated with trading system architects and platform engineers to align component interfaces and ensure
+consistent message flow validation across distributed systems.
+Contributed to performance tuning and framework extensibility to support scale-up in concurrent transaction
+processing.
+Zyme Solutions Pvt Ltd
+Lead QA Engineer
+Nov-2012
+Jan-2007
+Created comprehensive test plans and designed effective test cases, ensuring thorough test coverage.
+Developed reusable automation frameworks for regression testing, streamlining testing processes.
+Developed nightly build and deployment tools using Ant and Shell Scripting, enhancing development
+efficiency.
+Automated testing using Java, Selenium, AUTOIT, and AUTOHOTKEY, reducing manual testing efforts.
+Conducted performance testing of Data Warehouse applications, ensuring optimal system performance.
+Managed database operations using MySQL, writing complex queries and performing data manipulations.
+Education
+Vishweshvarayya Technological University
+Computer Science
+Bachelors of Engineering
+(October 2008 - January 2012)
+College: BMS College of Engineering Secured: 60%
+Mehmood Sheriff Polytechnic
+Computer Science
+(January 1996 - June 2000)
+Skills
+Operating Systems
+Proficient in Unix,
+OSX, Linux, and
+Windows operating
+systems.
+Unix, OSX, Linux,
+WindowsWeb Automation
+Experienced in web
+automation using
+Selenium and
+WebdriverIO.
+Selenium,
+WebdriverIOVersion Control
+System
+Expert in version
+control systems such
+as GitHub and SVN.
+GitHub, SVNTesting
+Framework
+Advanced
+proficiency in
+testing frameworks
+including JUnit and
+TestNG.
+JUnit, TestNGMobile Automation
+Skilled in mobile
+automation tools
+like Appium,
+Experitest,
+Greenplant, and
+Calabash.
+Appium, Experitest,
+Greenplant, Calabash
+Manual Testing
+Comprehensive
+experience in
+manual testing
+including test
+planning,
+execution, and
+various types of
+testing such as GUI
+and database.
+Test Planning, Test
+Preparation,
+Execution, Regression,
+Sanity, UAT, GUI
+Testing, Database
+Testing, Web
+Application TestingTesting
+Methodologies
+Expertise in
+functional testing,
+integration testing,
+and Failure Mode
+Effect Analysis
+(FMEA).
+Functional Testing,
+Integration Testing,
+FMEA (Failure Mode
+Effect Analysis)Programming
+Knowledge
+Strong programming
+skills in Core Java,
+C++, Python, Groovy,
+and Swift.
+Core Java, C++, Python,
+Groovy, SwiftScripting
+Proficient in
+scripting languages
+including
+JavaScript and
+Shell Scripting.
+JavaScript, Shell
+ScriptingWeb/Application
+Servers
+Familiar with
+web/application
+servers such as
+Tomcat, Jboss, and
+Jetty.
+Tomcat, Jboss, Jetty
+Databases
+Experience with
+databases including
+MongoDB, MySQL,
+Oracle 9i, SQLite,
+NoSQL, Cassandra,
+and DynamoDB.
+MongoDB, MySQL,
+Oracle 9i, SQLite,
+NoSQL, Cassandra,
+DynamoDBWeb Technologies
+Understanding of
+web technologies
+such as HTML5 and
+CSS.
+HTML5, CSSWeb Service Tools
+Proficient in web
+service tools
+including POSTMAN,
+REST Client, SOAP UI,
+and Solr.
+POSTMAN, REST Client,
+SOAP UI, SolrTest Management
+Tools
+Experienced with
+test management
+tools like Test Link,
+Microsoft Excel,
+and Test Rail.
+Test Link, Microsoft
+Excel, Test RailBug Tracking Tools
+Expertise in bug
+tracking tools
+including Rally,
+Jira, Mingle, and
+Trac.
+Rally, Jira, Mingle,
+Trac
+Code Coverage
+Tools
+Knowledgeable in
+code coverage tools
+such as SonarQube
+and Jacoco.
+SonarQube, JacocoCI/CD Tools
+Experience with
+CI/CD tools like
+Jenkins, Team City,
+Blue Ocean, Git,
+and Gradle.
+Jenkins, Team City,
+Blue Ocean, Git,
+GradleTest Platforms
+Proficient in test
+platforms including
+SauceLabs,
+BrowserStack, and
+CrossBrowserTesting.
+SauceLabs,
+BrowserStack,
+CrossBrowserTestingCloud
+Technologies
+Experienced with
+cloud technologies
+such as Docker,
+AWS, AWS Fargate,
+EKS, ECS, GCP, and
+Kubernetes.
+Docker, AWS, AWS
+Fargate, EKS, ECS,
+GCP, KubernetesBDD
+Proficient in BDD
+tools like Cucumber
+and JBehave.
+Cucumber, JBehave
+Data Pipeline
+Technologies
+Experienced with
+data pipeline
+technologies such
+as Kafka and Spark.
+Kafka, SparkDistributed
+Computing
+Systems
+Knowledgeable in
+distributed
+computing systems
+including Hadoop,
+HDFS, and Hive.
+Hadoop, HDFS, HiveWeb API
+Development
+Experienced in web
+API development
+using RxJava.
+RxJavaVirtualization
+Technologies
+Proficient in
+virtualization
+technologies like
+VMWare and
+VirtualBox.
+VMWare, VirtualBoxAI/ML Applications
+Leveraged AI/ML
+for test automation,
+including AI-driven
+test script
+generation,
+automated API test
+generation, and
+AI/ML algorithms
+for UI and API
+analysis.
+AI-driven Test Script
+Generation,
+Automated API Test
+Generation, AI/ML
+Algorithms for UI and
+API Analysis
