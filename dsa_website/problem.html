@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem - DSA Hub</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="problem.css">
+    <!-- Monaco Editor -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/editor/editor.main.min.css">
+    <!-- Pyodide for Python execution -->
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+    <!-- Problems Database -->
+    <script src="data/problems.js"></script>
+</head>
+<body class="problem-page">
+    <!-- Top Navigation Bar -->
+    <nav class="problem-navbar">
+        <div class="nav-left">
+            <a href="index.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <a href="index.html" class="logo">
+                <i class="fas fa-code"></i>
+                <span>DSA Hub</span>
+            </a>
+        </div>
+        <div class="nav-center">
+            <button id="prev-problem" class="nav-problem-btn" title="Previous Problem">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <span id="problem-title-nav" class="problem-title-nav">Loading...</span>
+            <button id="next-problem" class="nav-problem-btn" title="Next Problem">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        <div class="nav-right">
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <div class="problem-container">
+        <!-- Left Panel: Problem Description -->
+        <div class="left-panel" id="left-panel">
+            <div class="panel-tabs">
+                <button class="panel-tab active" data-tab="description">
+                    <i class="fas fa-file-alt"></i> Description
+                </button>
+                <button class="panel-tab" data-tab="solutions">
+                    <i class="fas fa-lightbulb"></i> Solutions
+                </button>
+                <button class="panel-tab" data-tab="submissions">
+                    <i class="fas fa-history"></i> Submissions
+                </button>
+            </div>
+            
+            <div class="panel-content">
+                <!-- Description Tab -->
+                <div id="description-tab" class="tab-content active">
+                    <div class="problem-header">
+                        <h1 id="problem-title">Two Sum</h1>
+                        <div class="problem-badges">
+                            <span id="difficulty-badge" class="difficulty-badge easy">Easy</span>
+                            <span class="frequency-badge"><i class="fas fa-fire"></i> <span id="frequency">85</span>%</span>
+                        </div>
+                    </div>
+                    
+                    <div id="problem-description" class="problem-description">
+                        <!-- Problem description will be loaded here -->
+                    </div>
+                    
+                    <div class="problem-examples" id="problem-examples">
+                        <!-- Examples will be loaded here -->
+                    </div>
+                    
+                    <div class="problem-constraints" id="problem-constraints">
+                        <!-- Constraints will be loaded here -->
+                    </div>
+                    
+                    <div class="problem-tags">
+                        <h4>Related Topics</h4>
+                        <div id="problem-patterns" class="tags-list"></div>
+                    </div>
+                    
+                    <div class="problem-companies">
+                        <h4>Companies</h4>
+                        <div id="problem-companies" class="companies-list"></div>
+                    </div>
+                </div>
+                
+                <!-- Solutions Tab -->
+                <div id="solutions-tab" class="tab-content">
+                    <div class="solutions-list" id="solutions-list">
+                        <!-- Solutions will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Submissions Tab -->
+                <div id="submissions-tab" class="tab-content">
+                    <div class="submissions-list" id="submissions-list">
+                        <p class="empty-state">Your submissions will appear here.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Resizer -->
+        <div class="resizer" id="resizer"></div>
+
+        <!-- Right Panel: Code Editor & Test Cases -->
+        <div class="right-panel" id="right-panel">
+            <!-- Editor Header -->
+            <div class="editor-header">
+                <div class="language-selector">
+                    <select id="language-select">
+                        <option value="python">Python</option>
+                        <option value="javascript">JavaScript</option>
+                    </select>
+                </div>
+                <div class="editor-actions">
+                    <button id="reset-code" class="editor-btn" title="Reset Code">
+                        <i class="fas fa-undo"></i>
+                    </button>
+                    <button id="format-code" class="editor-btn" title="Format Code">
+                        <i class="fas fa-align-left"></i>
+                    </button>
+                    <button id="settings-btn" class="editor-btn" title="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Monaco Editor Container -->
+            <div id="editor-container" class="editor-container"></div>
+
+            <!-- Bottom Panel: Test Cases & Results -->
+            <div class="bottom-panel" id="bottom-panel">
+                <div class="bottom-tabs">
+                    <button class="bottom-tab active" data-tab="testcase">
+                        <i class="fas fa-flask"></i> Testcase
+                    </button>
+                    <button class="bottom-tab" data-tab="result">
+                        <i class="fas fa-terminal"></i> Result
+                    </button>
+                </div>
+
+                <div class="bottom-content">
+                    <!-- Testcase Tab -->
+                    <div id="testcase-tab" class="bottom-tab-content active">
+                        <div class="testcase-selector">
+                            <div id="testcase-buttons" class="testcase-buttons">
+                                <!-- Test case buttons will be generated -->
+                            </div>
+                            <button id="add-testcase" class="add-testcase-btn">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <div class="testcase-inputs" id="testcase-inputs">
+                            <!-- Test case inputs will be generated -->
+                        </div>
+                    </div>
+
+                    <!-- Result Tab -->
+                    <div id="result-tab" class="bottom-tab-content">
+                        <div id="result-content" class="result-content">
+                            <p class="result-placeholder">Click "Run" to execute your code</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="action-bar">
+                    <div class="console-toggle">
+                        <button id="toggle-console" class="console-btn">
+                            <i class="fas fa-terminal"></i> Console
+                        </button>
+                    </div>
+                    <div class="run-buttons">
+                        <button id="run-code" class="run-btn">
+                            <i class="fas fa-play"></i> Run
+                        </button>
+                        <button id="submit-code" class="submit-btn">
+                            <i class="fas fa-cloud-upload-alt"></i> Submit
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay for Pyodide -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Loading Python runtime...</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+    <script src="data/problem-details.js"></script>
+    <script src="problem.js"></script>
+</body>
+</html>
+

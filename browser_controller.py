@@ -97,7 +97,8 @@ class BrowserController:
         "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0",
     ]
 
-    def __init__(self, headless: bool = None, slow_mo: int = None, humanize: bool = True):
+    def __init__(self, headless: bool = None, slow_mo: int = None, humanize: bool = True,
+                 connect_to_existing: bool = None, cdp_url: str = None):
         self.headless = headless if headless is not None else os.getenv("HEADLESS", "false").lower() == "true"
         self.slow_mo = slow_mo if slow_mo is not None else int(os.getenv("SLOW_MO", "50"))  # Reduced - we add our own delays
         self.humanize = humanize
@@ -105,6 +106,9 @@ class BrowserController:
         self.context: Optional[BrowserContext] = None
         self.page: Optional[Page] = None
         self.playwright = None
+        # Connect to existing browser instead of launching new one
+        self.connect_to_existing = connect_to_existing if connect_to_existing is not None else os.getenv("CONNECT_TO_EXISTING", "false").lower() == "true"
+        self.cdp_url = cdp_url or os.getenv("CDP_URL", "http://localhost:9222")
 
     async def start(self, use_persistent: bool = True):
         """Start the browser with human-like settings. Reuses existing window if available."""
@@ -117,6 +121,40 @@ class BrowserController:
         # Path for persistent browser data (cookies, localStorage, etc.)
         user_data_dir = os.path.join(os.path.dirname(__file__), '.browser_data')
 
+        # OPTION 1: Connect to an existing Chrome browser via CDP
+        if self.connect_to_existing:
+            print(f"🔌 Connecting to existing browser at {self.cdp_url}...")
+            try:
+                self.browser = await self.playwright.chromium.connect_over_cdp(self.cdp_url)
+                # Get existing contexts and pages
+                contexts = self.browser.contexts
+                if contexts:
+                    self.context = contexts[0]
+                    if self.context.pages:
+                        self.page = self.context.pages[0]
+                        print(f"🌐 Connected to existing browser! Using tab: {self.page.url[:60]}...")
+                    else:
+                        self.page = await self.context.new_page()
+                        print("🌐 Connected to existing browser! Created new tab.")
+                else:
+                    # Create new context if none exist
+                    self.context = await self.browser.new_context()
+                    self.page = await self.context.new_page()
+                    print("🌐 Connected to existing browser! Created new context and tab.")
+
+                # Hide webdriver property in connected browser
+                await self.context.add_init_script("""
+                    Object.defineProperty(navigator, 'webdriver', {get: () => undefined});
+                """)
+                return self
+            except Exception as e:
+                print(f"❌ Failed to connect to existing browser: {e}")
+                print("   Make sure Chrome is running with: ")
+                print("   /Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome --remote-debugging-port=9222")
+                print("   Or on Windows: chrome.exe --remote-debugging-port=9222")
+                print("\n   Falling back to launching new browser...")
+
+        # OPTION 2: Use persistent context (existing behavior)
         if use_persistent and not self.headless:
             # Use persistent context to maintain login sessions
             self.context = await self.playwright.chromium.launch_persistent_context(

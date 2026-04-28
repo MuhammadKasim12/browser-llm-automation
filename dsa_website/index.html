@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-theme">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Hub - Master Data Structures & Algorithms</title>
+    <meta name="description" content="Master Data Structures and Algorithms for coding interviews. Free practice problems with Python and Java solutions.">
+    <meta name="keywords" content="DSA, algorithms, data structures, coding interview, leetcode, python, java">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google AdSense -->
+    <!-- Replace ca-pub-XXXXXXXXXXXXXXXX with your actual AdSense Publisher ID -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+    <!-- Problems Database -->
+    <script src="data/problems.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="#" class="logo">
+                <i class="fas fa-code"></i>
+                <span>DSA Hub</span>
+            </a>
+        </div>
+        <div class="nav-center">
+            <a href="#roadmap" class="nav-link active">Roadmap</a>
+            <a href="#explorer" class="nav-link">Explorer</a>
+            <a href="#companies" class="nav-link">Companies</a>
+            <a href="#" class="nav-link pro-btn">Pro <i class="fas fa-crown"></i></a>
+        </div>
+        <div class="nav-right">
+            <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">
+                <i class="fas fa-sun"></i>
+            </button>
+            <a href="#" class="sign-in-btn">Sign In</a>
+        </div>
+        <button class="hamburger" id="hamburger">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>A better way to prepare for <span class="gradient-text">coding interviews</span></h1>
+            <p class="hero-subtitle">Master essential algorithms and data structures through our curated roadmap and practice problems.</p>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" id="total-problems-count">150+</span>
+                    <span class="stat-label">Problems</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number">16</span>
+                    <span class="stat-label">Topics</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number">20+</span>
+                    <span class="stat-label">Companies</span>
+                </div>
+            </div>
+            <a href="#explorer" class="cta-btn">
+                <i class="fas fa-rocket"></i>
+                Explore Problems
+            </a>
+        </div>
+    </section>
+
+    <!-- Ad Unit 1: Below Hero (Horizontal Banner) -->
+    <div class="ad-container ad-horizontal">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXXXXX"
+             data-ad-format="horizontal"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="roadmap-section">
+        <div class="section-header">
+            <h2>DSA Roadmap</h2>
+            <p>Follow this structured path to master algorithms and data structures</p>
+            <div class="progress-overview">
+                <span id="total-progress">0 / 0 completed</span>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="total-progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="categories-container" id="roadmap-categories">
+            <!-- Categories will be dynamically populated -->
+        </div>
+    </section>
+
+    <!-- Problems Explorer Section -->
+    <section id="explorer" class="explorer-section">
+        <div class="section-header">
+            <h2>Problems Explorer</h2>
+            <p>Filter and explore problems by category, difficulty, company, or frequency</p>
+        </div>
+
+        <!-- View Toggle & Search -->
+        <div class="explorer-controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="problem-search" placeholder="Search problems...">
+            </div>
+            <div class="view-toggles">
+                <button class="view-toggle active" data-view="table" title="Table View">
+                    <i class="fas fa-list"></i>
+                </button>
+                <button class="view-toggle" data-view="cards" title="Card View">
+                    <i class="fas fa-th-large"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Group By Options -->
+        <div class="group-by-container">
+            <span class="group-label">Group by:</span>
+            <div class="group-options">
+                <button class="group-btn active" data-group="category">
+                    <i class="fas fa-folder"></i> Category
+                </button>
+                <button class="group-btn" data-group="difficulty">
+                    <i class="fas fa-signal"></i> Difficulty
+                </button>
+                <button class="group-btn" data-group="company">
+                    <i class="fas fa-building"></i> Company
+                </button>
+                <button class="group-btn" data-group="frequency">
+                    <i class="fas fa-fire"></i> Frequency
+                </button>
+                <button class="group-btn" data-group="pattern">
+                    <i class="fas fa-puzzle-piece"></i> Pattern
+                </button>
+                <button class="group-btn" data-group="none">
+                    <i class="fas fa-bars"></i> All
+                </button>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-container">
+            <!-- Difficulty Filter -->
+            <div class="filter-group">
+                <span class="filter-label">Difficulty:</span>
+                <div class="filter-chips" id="difficulty-filters">
+                    <button class="filter-chip active" data-difficulty="all">All</button>
+                    <button class="filter-chip easy" data-difficulty="easy">Easy</button>
+                    <button class="filter-chip medium" data-difficulty="medium">Medium</button>
+                    <button class="filter-chip hard" data-difficulty="hard">Hard</button>
+                </div>
+            </div>
+
+            <!-- Company Filter -->
+            <div class="filter-group">
+                <span class="filter-label">Company:</span>
+                <div class="filter-chips company-chips" id="company-filters">
+                    <button class="filter-chip active" data-company="all">All</button>
+                    <!-- Company chips will be dynamically populated -->
+                </div>
+            </div>
+
+            <!-- Status Filter -->
+            <div class="filter-group">
+                <span class="filter-label">Status:</span>
+                <div class="filter-chips" id="status-filters">
+                    <button class="filter-chip active" data-status="all">All</button>
+                    <button class="filter-chip" data-status="todo">To Do</button>
+                    <button class="filter-chip" data-status="done">Completed</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sort Options -->
+        <div class="sort-container">
+            <span class="sort-label">Sort by:</span>
+            <select id="sort-select" class="sort-select">
+                <option value="frequency-desc">🔥 Frequency (High to Low)</option>
+                <option value="frequency-asc">Frequency (Low to High)</option>
+                <option value="difficulty-asc">Difficulty (Easy First)</option>
+                <option value="difficulty-desc">Difficulty (Hard First)</option>
+                <option value="leetcode-asc">LeetCode # (Ascending)</option>
+                <option value="leetcode-desc">LeetCode # (Descending)</option>
+                <option value="name-asc">Name (A-Z)</option>
+            </select>
+            <span class="results-count" id="results-count">0 problems</span>
+        </div>
+
+        <!-- Problems Display Area -->
+        <div class="problems-display" id="problems-display">
+            <!-- Problems will be dynamically populated -->
+        </div>
+    </section>
+
+    <!-- Companies Section -->
+    <section id="companies" class="companies-section">
+        <div class="section-header">
+            <h2>Company-Wise Problems</h2>
+            <p>Practice problems frequently asked by top tech companies</p>
+        </div>
+        <div class="companies-grid" id="companies-grid">
+            <!-- Company cards will be dynamically populated -->
+        </div>
+    </section>
+
+    <!-- Ad Unit 3: After Sections (Horizontal Banner) -->
+    <div class="ad-container ad-horizontal">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+             data-ad-slot="XXXXXXXXXX"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+    </div>
+
+    <!-- Problem Detail Modal -->
+    <div id="problem-modal" class="modal">
+        <div class="modal-content problem-detail-modal">
+            <div class="modal-header">
+                <div class="modal-title-row">
+                    <h3 id="modal-problem-title">Problem Title</h3>
+                    <span id="modal-difficulty" class="difficulty-badge">Medium</span>
+                </div>
+                <button class="modal-close" id="problem-modal-close"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="problem-detail-content">
+                <!-- Problem Info Section -->
+                <div class="problem-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Frequency: <strong id="modal-frequency">85%</strong></span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-building"></i>
+                        <span>Companies: <span id="modal-companies"></span></span>
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-tags"></i>
+                        <span>Patterns: <span id="modal-patterns"></span></span>
+                    </div>
+                </div>
+
+                <!-- Prerequisites Section -->
+                <div id="modal-prereqs-section" class="problem-prereqs-section" style="display: none;">
+                    <h4><i class="fas fa-link"></i> Prerequisites</h4>
+                    <p class="prereqs-hint">Master these problems first for a smoother learning experience:</p>
+                    <div id="modal-prereqs-list" class="prereqs-list"></div>
+                </div>
+
+                <!-- Hint Section -->
+                <div id="modal-hint-section" class="problem-hint-section" style="display: none;">
+                    <h4><i class="fas fa-lightbulb"></i> Hint</h4>
+                    <p id="modal-hint-text" class="hint-text"></p>
+                </div>
+
+                <!-- Solution Section -->
+                <div class="solution-section">
+                    <h4><i class="fas fa-code"></i> Solution</h4>
+                    <div class="code-tabs">
+                        <button class="code-tab active" data-lang="python">Python</button>
+                        <button class="code-tab" data-lang="java">Java</button>
+                    </div>
+                    <div class="code-container">
+                        <button class="copy-btn" id="copy-btn"><i class="fas fa-copy"></i> Copy</button>
+                        <pre><code id="solution-code" class="language-python"></code></pre>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="modal-actions">
+                    <a id="leetcode-link" href="#" target="_blank" class="btn-leetcode">
+                        <i class="fas fa-external-link-alt"></i> Open on LeetCode
+                    </a>
+                    <button id="mark-complete-btn" class="btn-complete">
+                        <i class="fas fa-check"></i> <span>Mark Complete</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>DSA Hub</h4>
+                <p>Master algorithms and data structures for coding interviews.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Resources</h4>
+                <ul>
+                    <li><a href="#roadmap">Roadmap</a></li>
+                    <li><a href="#practice">Practice</a></li>
+                    <li><a href="#">LeetCode</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Social</h4>
+                <ul>
+                    <li><a href="#"><i class="fab fa-youtube"></i> YouTube</a></li>
+                    <li><a href="#"><i class="fab fa-github"></i> GitHub</a></li>
+                    <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 DSA Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    <script src="data/problems.js"></script>
+    <script src="data/problem-details.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

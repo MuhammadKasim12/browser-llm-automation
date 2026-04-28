@@ -5,6 +5,12 @@
 
 # Browser session data (contains login cookies)
 .browser_data/
+*_session.json
+*session.json
+
+# Intuit-related files do NOT belong in this repo (kept separately in ~/git/intuit-tools/)
+intuit_*.py
+intuit_*.json
 
 # Python
 __pycache__/
