@@ -312,6 +312,7 @@ def generate_resume_json(
     prompt = _build_prompt(job_title, company, job_description, resume_content,
                            current_role_config, role_type)
     cfg = get_llm_config(preferred=preferred_provider)
+    print(f"[resume-llm] provider={cfg['provider']} model={cfg['model']} role_type={role_type} role_config_loaded={current_role_config is not None}", flush=True)
 
     headers = {"Authorization": f"Bearer {cfg['api_key']}", "Content-Type": "application/json"}
     if cfg["provider"] == "openrouter":
