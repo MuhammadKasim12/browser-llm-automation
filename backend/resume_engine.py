@@ -72,7 +72,10 @@ def get_llm_config(preferred: Optional[str] = None, order: Iterable[str] = ("gro
             continue
         if os.environ.get(cfg["env_key"]):
             resolved = {"provider": name, **cfg, "api_key": os.environ[cfg["env_key"]]}
-            if model_override:
+            # Only honor LLM_MODEL when paired with an explicit LLM_PROVIDER (or `preferred`)
+            # that matches the chosen provider, otherwise an override meant for one provider
+            # leaks across providers (e.g. Cerebras model name sent to Groq).
+            if model_override and chosen == name:
                 resolved["model"] = model_override
             return resolved
     raise LLMError("No API key found. Set CEREBRAS_API_KEY, GROQ_API_KEY, or OPENROUTER_API_KEY.")
