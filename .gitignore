@@ -55,3 +55,10 @@ screenshots/
 .DS_Store
 Thumbs.db
 
+# Local SQLite (history is on Neon Postgres in prod)
+*.db
+*.db-journal
+
+# Vercel
+.vercel
+

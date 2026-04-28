@@ -59,16 +59,22 @@ class LLMError(RuntimeError):
 
 
 def get_llm_config(preferred: Optional[str] = None, order: Iterable[str] = ("cerebras", "groq", "openrouter")) -> dict:
-    """Pick a provider whose API key is set. `preferred` overrides order if its key exists."""
+    """Pick a provider whose API key is set. `preferred` (or LLM_PROVIDER env) wins if its key exists."""
     candidates = list(order)
-    if preferred and preferred in LLM_PROVIDERS:
-        candidates = [preferred] + [p for p in candidates if p != preferred]
+    env_pref = os.environ.get("LLM_PROVIDER", "").lower().strip() or None
+    chosen = preferred or env_pref
+    if chosen and chosen in LLM_PROVIDERS:
+        candidates = [chosen] + [p for p in candidates if p != chosen]
+    model_override = os.environ.get("LLM_MODEL", "").strip() or None
     for name in candidates:
         cfg = LLM_PROVIDERS.get(name)
         if not cfg:
             continue
         if os.environ.get(cfg["env_key"]):
-            return {"provider": name, **cfg, "api_key": os.environ[cfg["env_key"]]}
+            resolved = {"provider": name, **cfg, "api_key": os.environ[cfg["env_key"]]}
+            if model_override:
+                resolved["model"] = model_override
+            return resolved
     raise LLMError("No API key found. Set CEREBRAS_API_KEY, GROQ_API_KEY, or OPENROUTER_API_KEY.")
 
 

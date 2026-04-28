@@ -8,8 +8,13 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 _db_path = os.environ.get("DATABASE_URL")
 if not _db_path:
     _db_path = f"sqlite:///{Path(__file__).parent / 'resume_history.db'}"
+elif _db_path.startswith("postgres://"):
+    _db_path = "postgresql://" + _db_path[len("postgres://"):]
 
-engine = create_engine(_db_path, connect_args={"check_same_thread": False} if "sqlite" in _db_path else {})
+if _db_path.startswith("sqlite"):
+    engine = create_engine(_db_path, connect_args={"check_same_thread": False})
+else:
+    engine = create_engine(_db_path, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
