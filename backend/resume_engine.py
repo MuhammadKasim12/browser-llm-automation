@@ -371,8 +371,15 @@ def _build_pdf_story(data: dict):
     story.append(Paragraph("PROFESSIONAL SUMMARY", section_style))
     story.append(Paragraph(data.get("summary", ""), body_style))
     story.append(Paragraph("TECHNICAL SKILLS", section_style))
-    for category, skills in (data.get("skills") or {}).items():
-        text = ", ".join(str(s) for s in skills) if isinstance(skills, list) else skills
+    skills_data = data.get("skills") or {}
+    if isinstance(skills_data, dict):
+        skills_items = skills_data.items()
+    elif isinstance(skills_data, list):
+        skills_items = [("Skills", skills_data)]
+    else:
+        skills_items = [("Skills", str(skills_data))]
+    for category, skills in skills_items:
+        text = ", ".join(str(s) for s in skills) if isinstance(skills, list) else str(skills)
         story.append(Paragraph(f"<b>{category}:</b> {text}", body_style))
     story.append(Paragraph("PROFESSIONAL EXPERIENCE", section_style))
     for job in data.get("experience", []) or []:
