@@ -58,7 +58,7 @@ class LLMError(RuntimeError):
     pass
 
 
-def get_llm_config(preferred: Optional[str] = None, order: Iterable[str] = ("cerebras", "groq", "openrouter")) -> dict:
+def get_llm_config(preferred: Optional[str] = None, order: Iterable[str] = ("groq", "cerebras", "openrouter")) -> dict:
     """Pick a provider whose API key is set. `preferred` (or LLM_PROVIDER env) wins if its key exists."""
     candidates = list(order)
     env_pref = os.environ.get("LLM_PROVIDER", "").lower().strip() or None
@@ -320,7 +320,7 @@ def generate_resume_json(
             {"role": "system", "content": prompt},
             {"role": "user", "content": f"Job: {job_title} at {company}\n\nJob Description:\n{job_description}\n\nResume:\n{resume_content}"},
         ],
-        "max_tokens": 4000,
+        "max_tokens": 8000,
         "temperature": 0.5,
     }
     if cfg["provider"] in ("groq", "cerebras"):

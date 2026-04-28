@@ -38,8 +38,8 @@ LLM_PROVIDERS = {
 
 
 def get_llm_config():
-    """Get the current LLM provider configuration - prioritize Cerebras"""
-    for provider_name in ["cerebras", "groq", "openrouter"]:
+    """Get the current LLM provider configuration - prioritize Groq (70B follows multi-step prompts)"""
+    for provider_name in ["groq", "cerebras", "openrouter"]:
         config = LLM_PROVIDERS[provider_name]
         api_key = os.environ.get(config["env_key"], "")
         if api_key:
@@ -326,7 +326,7 @@ Return ONLY valid JSON, no other text."""
             {"role": "system", "content": prompt},
             {"role": "user", "content": f"Job: {job_title} at {company}\n\nJob Description:\n{job_description}\n\nResume:\n{resume_content}"}
         ],
-        "max_tokens": 4000,
+        "max_tokens": 8000,
         "temperature": 0.5
     }
 
