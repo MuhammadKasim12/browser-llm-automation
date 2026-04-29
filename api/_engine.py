@@ -109,64 +109,106 @@ def load_default_resume_text() -> str:
 
 def _build_prompt(job_title: str, company: str, job_description: str, resume_content: str,
                   current_role_config: Optional[dict], role_type: str) -> str:
+    """Mirrors generate_resume.py prompt verbatim so web output matches local CLI."""
     selected_client = "Intuit" if role_type == "software_engineer" else "Apple"
     current_experience_text = ""
     if current_role_config:
         exp = current_role_config.get("current_experience", {})
-        sel_map = current_role_config.get("role_selection", {})
-        selected_client = sel_map.get(role_type, selected_client)
+        role_selection = current_role_config.get("role_selection", {})
+        selected_client = role_selection.get(role_type, selected_client)
+
         for client in exp.get("clients", []):
             if client.get("name") == selected_client:
-                bullets = "\n".join("- " + p for p in client.get("points", []))
-                current_experience_text += (
-                    f"\nCURRENT ROLE (MUST BE FIRST IN EXPERIENCE LIST):\n"
-                    f"Company: Galaxy I Tech (Contract)\nClient: {client.get('name')}\n"
-                    f"Title: {client.get('title')}\nLocation: {exp.get('location')}\n"
-                    f"Dates: {client.get('dates')}\nPoints:\n{bullets}\n"
-                )
+                current_experience_text = f"""
+CURRENT ROLE (MUST BE FIRST IN EXPERIENCE LIST):
+Company: Galaxy I Tech (Contract)
+Client: {client.get('name')}
+Title: {client.get('title')}
+Location: {exp.get('location')}
+Dates: {client.get('dates')}
+Points:
+{chr(10).join('• ' + p for p in client.get('points', []))}
+"""
                 break
+
         missing_exp = current_role_config.get("missing_experience", {})
         paypal_key = f"PayPal_{'QE' if role_type == 'qa_engineer' else 'SWE'}"
         if paypal_key in missing_exp:
             paypal = missing_exp[paypal_key]
-            bullets = "\n".join("- " + p for p in paypal.get("points", []))
-            current_experience_text += (
-                f"\nMISSING EXPERIENCE (between Ancestry and Proofpoint):\n"
-                f"Company: {paypal.get('company')}\nTitle: {paypal.get('title')}\n"
-                f"Location: {paypal.get('location')}\nDates: {paypal.get('dates')}\nPoints:\n{bullets}\n"
-            )
+            current_experience_text += f"""
+
+MISSING EXPERIENCE (INCLUDE IN TIMELINE - between Ancestry and Proofpoint):
+Company: {paypal.get('company')}
+Title: {paypal.get('title')}
+Location: {paypal.get('location')}
+Dates: {paypal.get('dates')}
+Points:
+{chr(10).join('• ' + p for p in paypal.get('points', []))}
+"""
+
         date_corrections = current_role_config.get("date_corrections", {})
         if date_corrections:
-            corrections = "\n".join(f"- {c}: {d}" for c, d in date_corrections.items())
-            current_experience_text += f"\nDATE CORRECTIONS (APPLY THESE):\n{corrections}\n"
+            current_experience_text += f"""
 
-        if current_experience_text:
-            current_experience_text += (
-                f"\nCRITICAL EXPERIENCE INSTRUCTIONS (MUST FOLLOW):\n"
-                f"1. The CURRENT ROLE at Galaxy I Tech (Client: {selected_client}) MUST be the FIRST experience entry.\n"
-                f"2. Include the MISSING PayPal experience (Mar 2020 - Aug 2021) in chronological position.\n"
-                f"3. Apply all DATE CORRECTIONS (e.g., Citi ends Jun 2025, NOT Present).\n"
-                f"4. Order all other experiences in reverse chronological order after the current role.\n"
-                f"5. Do NOT invent or duplicate experiences.\n"
-            )
+DATE CORRECTIONS (APPLY THESE):
+{chr(10).join(f'• {co}: {d}' for co, d in date_corrections.items())}
+"""
 
-    brand = (
-        f"PROFILE: {PERSONAL_BRAND['profile_snapshot']['who_i_am']}\n"
-        f"CORE APPROACH: {', '.join(PERSONAL_BRAND['profile_snapshot']['core_approach'])}\n"
-        f"FOCUS AREAS: {', '.join(PERSONAL_BRAND['expertise_foundation']['focus_areas'])}\n"
-        f"WHAT SETS APART: {', '.join(PERSONAL_BRAND['positioning']['what_sets_apart'])}\n"
-        f"TRAITS: {', '.join(PERSONAL_BRAND['professional_traits']['how_i_show_up'])}\n"
-        f"DELIVERY: {', '.join(PERSONAL_BRAND['delivery_communication']['how_i_create_results'])}\n"
-        f"MODERN STACK: {', '.join(PERSONAL_BRAND['expertise_foundation']['tech_stack'])}"
-    )
+        exp_restructure = current_role_config.get("experience_restructure", {})
+        if "Altimetrik" in exp_restructure:
+            alt = exp_restructure["Altimetrik"]
+            coe = alt.get("coe", {})
+            current_experience_text += f"""
 
-    return _PROMPT_TEMPLATE.format(brand=brand, current=current_experience_text, selected=selected_client)
+ALTIMETRIK CONTEXT:
+- Dates: {alt.get('dates')}
+- Type: {alt.get('type')}
+- Note: {alt.get('note')}
+- {coe.get('role', '')}
+"""
 
+    brand_context = f"""
+CANDIDATE'S PERSONAL BRAND (Use this to shape the resume voice and positioning):
 
+PROFILE: {PERSONAL_BRAND['profile_snapshot']['who_i_am']}
 
-_PROMPT_TEMPLATE = """CANDIDATE PERSONAL BRAND:
-{brand}
-{current}
+CORE APPROACH:
+- {chr(10).join('• ' + a for a in PERSONAL_BRAND['profile_snapshot']['core_approach'])}
+
+EXPERTISE FOCUS AREAS:
+- {chr(10).join('• ' + a for a in PERSONAL_BRAND['expertise_foundation']['focus_areas'])}
+
+WHAT SETS THIS CANDIDATE APART:
+- {chr(10).join('• ' + d for d in PERSONAL_BRAND['positioning']['what_sets_apart'])}
+
+PROFESSIONAL TRAITS (reflect these in bullet points):
+- {chr(10).join('• ' + t for t in PERSONAL_BRAND['professional_traits']['how_i_show_up'])}
+- {chr(10).join('• ' + s for s in PERSONAL_BRAND['professional_traits']['strengths'])}
+
+DELIVERY STYLE (incorporate into achievements):
+- {chr(10).join('• ' + d for d in PERSONAL_BRAND['delivery_communication']['how_i_create_results'])}
+
+MODERN TECH STACK (prioritize these when relevant to JD):
+{', '.join(PERSONAL_BRAND['expertise_foundation']['tech_stack'])}
+"""
+
+    experience_instructions = ""
+    if current_experience_text:
+        experience_instructions = f"""
+{current_experience_text}
+
+CRITICAL EXPERIENCE INSTRUCTIONS (MUST FOLLOW):
+1. ONLY include the ONE current role listed above (Galaxy I Tech with {selected_client}) - DO NOT add any other clients
+2. The CURRENT ROLE at Galaxy I Tech - Client: {selected_client} MUST be the FIRST experience entry
+3. Include the MISSING PayPal experience in the correct chronological position (Mar 2020 - Aug 2021)
+4. Apply all DATE CORRECTIONS listed above (e.g., Citi ends Jun 2025, NOT Present)
+5. Order all other experiences in reverse chronological order (most recent first)
+6. DO NOT invent or duplicate experiences - only use what's in the resume + the additions above
+"""
+
+    return f"""{brand_context}
+{experience_instructions}
+
 Analyze the resume and job description, then return a JSON object with this EXACT structure:
 {{
     "name": "Full Name",
@@ -175,7 +217,7 @@ Analyze the resume and job description, then return a JSON object with this EXAC
     "phone": "(510) 771-4493",
     "location": "San Jose, CA",
     "linkedin": "linkedin URL or empty string",
-    "summary": "3-4 sentence professional summary tailored to the job and reflecting the brand above",
+    "summary": "3-4 sentence professional summary that reflects the PERSONAL BRAND above while tailored to the job",
     "skills": {{
         "Languages": "Python, Java, JavaScript, TypeScript, etc",
         "Frameworks": "React, Next.js, Node.js, Spring Boot, etc",
@@ -188,7 +230,11 @@ Analyze the resume and job description, then return a JSON object with this EXAC
             "company": "Company Name",
             "location": "City, State",
             "dates": "MMM YYYY - MMM YYYY",
-            "points": ["bullet 1", "bullet 2", "bullet 3"]
+            "points": [
+                "First bullet point showing problem-first thinking with metrics",
+                "Second bullet point demonstrating business value delivery",
+                "Third bullet point highlighting scalable architecture work"
+            ]
         }}
     ]
 }}
@@ -196,21 +242,42 @@ Analyze the resume and job description, then return a JSON object with this EXAC
 CRITICAL REQUIREMENTS:
 - Skills MUST be comma-separated strings, NOT arrays
 - Each job MUST have 3-5 bullet points in "points" array
-- FIRST EXPERIENCE MUST be the CURRENT ROLE specified above (Galaxy I Tech) when present
+- FIRST EXPERIENCE MUST be the CURRENT ROLE specified above (Galaxy I Tech) - this is MANDATORY
 - Order experience REVERSE CHRONOLOGICALLY (most recent first) AFTER the current role
 - Use date format "MMM YYYY - MMM YYYY" (e.g., "Sep 2022 - Oct 2023")
+- Include ALL work experience from the original resume PLUS the current role and PayPal experience specified above
 - Apply Citi date correction: Oct 2024 - Jun 2025 (NOT Present)
-- Keep all information truthful; quantify achievements where possible
+- Keep all information truthful
+- Quantify achievements where possible (%, $, time saved, users impacted)
 
-SKILLS HONESTY (CRITICAL):
-- ONLY list skills that are ACTUALLY in the provided resume
-- DO NOT invent skills from the job description that are not in the resume
+JOB DESCRIPTION KEYWORD MATCHING:
+- Analyze job description for key requirements and technologies
+- Rewrite bullet points to naturally incorporate JD keywords
+- Prioritize experiences that match what the JD is asking for
+- Highlight React, Next.js, TypeScript, Node.js when relevant to the role
+
+PERSONAL BRAND VOICE (CRITICAL):
+- The summary MUST reflect: "{PERSONAL_BRAND['profile_snapshot']['who_i_am'][:60]}..."
+- Bullet points should show: Problem-first thinking, Business value delivery, Scalable solutions
+- Convey reliability, proactivity, and attention to detail
+- Show clear documentation/communication skills through structured achievements
+- Demonstrate "Strategy + execution + scalability" through concrete examples
+
+HUMANIZATION (AVOID AI-SOUNDING TEXT):
+- Write like a real person, not a template
+- Vary sentence structures - don't start every bullet the same way
+- Use natural action verbs: Led, Built, Designed, Drove, Collaborated, Architected, Streamlined
+- Include context and specifics that make achievements authentic
+- Avoid buzzword stuffing - be specific and genuine
+- Tell mini-stories: Problem → Solution → Impact
+
+SKILLS HONESTY (CRITICAL - DO NOT VIOLATE):
+- ONLY list skills that are ACTUALLY mentioned in the provided resume
+- DO NOT add skills from the job description that are NOT in the resume
+- DO NOT fabricate or invent skills the candidate doesn't have
+- If the job requires a skill not in the resume (e.g., Scala, Ruby, Go), DO NOT add it
 - Focus on highlighting TRANSFERABLE skills that ARE in the resume
-
-HUMANIZATION:
-- Vary sentence structures; avoid template-sounding bullets
-- Use natural action verbs: Led, Built, Designed, Drove, Collaborated, Architected
-- Tell mini-stories: Problem -> Solution -> Impact
+- It's better to have fewer honest skills than to lie about capabilities
 
 Return ONLY valid JSON, no other text."""
 
