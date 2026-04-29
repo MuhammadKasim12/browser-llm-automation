@@ -60,25 +60,40 @@ class LLMError(RuntimeError):
 
 def get_llm_config(preferred: Optional[str] = None, order: Iterable[str] = ("groq", "cerebras", "openrouter")) -> dict:
     """Pick a provider whose API key is set. `preferred` (or LLM_PROVIDER env) wins if its key exists."""
+    chain = get_llm_config_chain(preferred=preferred, order=order)
+    if not chain:
+        raise LLMError("No API key found. Set CEREBRAS_API_KEY, GROQ_API_KEY, or OPENROUTER_API_KEY.")
+    return chain[0]
+
+
+def get_llm_config_chain(preferred: Optional[str] = None,
+                         order: Iterable[str] = ("groq", "cerebras", "openrouter")) -> list:
+    """Return ALL providers with API keys set, in fallback order (preferred first)."""
     candidates = list(order)
     env_pref = os.environ.get("LLM_PROVIDER", "").lower().strip() or None
     chosen = preferred or env_pref
     if chosen and chosen in LLM_PROVIDERS:
         candidates = [chosen] + [p for p in candidates if p != chosen]
     model_override = os.environ.get("LLM_MODEL", "").strip() or None
+    chain = []
     for name in candidates:
         cfg = LLM_PROVIDERS.get(name)
-        if not cfg:
+        if not cfg or not os.environ.get(cfg["env_key"]):
             continue
-        if os.environ.get(cfg["env_key"]):
-            resolved = {"provider": name, **cfg, "api_key": os.environ[cfg["env_key"]]}
-            # Only honor LLM_MODEL when paired with an explicit LLM_PROVIDER (or `preferred`)
-            # that matches the chosen provider, otherwise an override meant for one provider
-            # leaks across providers (e.g. Cerebras model name sent to Groq).
-            if model_override and chosen == name:
-                resolved["model"] = model_override
-            return resolved
-    raise LLMError("No API key found. Set CEREBRAS_API_KEY, GROQ_API_KEY, or OPENROUTER_API_KEY.")
+        resolved = {"provider": name, **cfg, "api_key": os.environ[cfg["env_key"]]}
+        # Only honor LLM_MODEL when paired with an explicit LLM_PROVIDER (or `preferred`)
+        # that matches the chosen provider, otherwise an override meant for one provider
+        # leaks across providers (e.g. Cerebras model name sent to Groq).
+        if model_override and chosen == name:
+            resolved["model"] = model_override
+        chain.append(resolved)
+    return chain
+
+
+def _is_rate_limit_error(msg: str) -> bool:
+    m = (msg or "").lower()
+    return any(s in m for s in ("rate limit", "ratelimit", "429", "too many requests",
+                                 "quota", "tpm", "tokens per minute", "rpm"))
 
 
 def find_current_role_config() -> Optional[dict]:
@@ -363,24 +378,9 @@ def _detect_role_type(job_title: str) -> str:
     return "software_engineer"
 
 
-def generate_resume_json(
-    job_title: str,
-    company: str,
-    job_description: str,
-    resume_content: str,
-    current_role_config: Optional[dict] = None,
-    preferred_provider: Optional[str] = None,
-) -> dict:
-    """Call the LLM and return the structured resume JSON. Raises LLMError on failure."""
-    role_type = _detect_role_type(job_title)
-    if current_role_config is None:
-        current_role_config = find_current_role_config()
-
-    prompt = _build_prompt(job_title, company, job_description, resume_content,
-                           current_role_config, role_type)
-    cfg = get_llm_config(preferred=preferred_provider)
-    print(f"[resume-llm] provider={cfg['provider']} model={cfg['model']} role_type={role_type} role_config_loaded={current_role_config is not None}", flush=True)
-
+def _call_one_provider(cfg: dict, prompt: str, job_title: str, company: str,
+                       job_description: str, resume_content: str) -> dict:
+    """Single LLM call. Raises LLMError on any failure."""
     headers = {"Authorization": f"Bearer {cfg['api_key']}", "Content-Type": "application/json"}
     if cfg["provider"] == "openrouter":
         headers["HTTP-Referer"] = "https://github.com/resume-generator"
@@ -421,6 +421,44 @@ def generate_resume_json(
         data["experience"] = sort_experience_by_date(data["experience"])
     data["_meta"] = {"provider": cfg["provider"], "model": cfg["model"]}
     return data
+
+
+def generate_resume_json(
+    job_title: str,
+    company: str,
+    job_description: str,
+    resume_content: str,
+    current_role_config: Optional[dict] = None,
+    preferred_provider: Optional[str] = None,
+) -> dict:
+    """Call the LLM with provider fallback on rate-limit errors.
+
+    Tries preferred provider first; on 429/rate-limit, falls through to the
+    next provider with an API key configured. Other errors abort immediately.
+    """
+    role_type = _detect_role_type(job_title)
+    if current_role_config is None:
+        current_role_config = find_current_role_config()
+
+    prompt = _build_prompt(job_title, company, job_description, resume_content,
+                           current_role_config, role_type)
+    chain = get_llm_config_chain(preferred=preferred_provider)
+    if not chain:
+        raise LLMError("No API key found. Set CEREBRAS_API_KEY, GROQ_API_KEY, or OPENROUTER_API_KEY.")
+
+    last_error: Optional[LLMError] = None
+    for idx, cfg in enumerate(chain):
+        print(f"[resume-llm] attempt={idx+1}/{len(chain)} provider={cfg['provider']} model={cfg['model']} role_type={role_type} role_config_loaded={current_role_config is not None}", flush=True)
+        try:
+            return _call_one_provider(cfg, prompt, job_title, company, job_description, resume_content)
+        except LLMError as e:
+            last_error = e
+            if _is_rate_limit_error(str(e)) and idx < len(chain) - 1:
+                next_cfg = chain[idx + 1]
+                print(f"[resume-llm] rate-limited on {cfg['provider']}; falling back to {next_cfg['provider']} ({next_cfg['model']})", flush=True)
+                continue
+            raise
+    raise last_error or LLMError("All providers exhausted")
 
 
 def _build_pdf_story(data: dict):
