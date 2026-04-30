@@ -95,6 +95,39 @@
       }
     }
   },
-  "instructions": "IMPORTANT: Include PayPal experience (Mar 2020 - Aug 2021) between Ancestry and Proofpoint. Show Altimetrik as parent company for Intuit, Ancestry, PayPal. Emphasize CoE and POC work."
+  "older_experience": [
+    {
+      "company": "Altimetrik - Client: Intuit",
+      "title": "Software Development Engineer in Test",
+      "location": "Mountain View, CA",
+      "dates": "Jan 2014 - Jan 2019",
+      "points": [
+        "Led the design and implementation of a state-of-the-art test automation framework using Java/Reflection mechanism, facilitating Excel spreadsheet-based automation",
+        "Developed a user-friendly interface for test case management, execution, and reporting, enhancing testing efficiency and effectiveness",
+        "Developed and executed test automation using Java and Appium for iOS and Android, significantly improving test coverage and efficiency",
+        "Played a pivotal role in containerizing the QuickBooks application, enabling seamless deployment, scaling, and management of application components",
+        "Designed and implemented container orchestration solutions using Docker and Kubernetes, optimizing resource utilization and enhancing system scalability and resilience"
+      ]
+    },
+    {
+      "company": "Barclays Financial Corporation",
+      "title": "Software Development Engineer in Test",
+      "location": "Pune, India",
+      "dates": "Nov 2012 - Dec 2013",
+      "points": [
+        "Designed and developed a custom Domain-Specific Language (DSL) Framework to support trading operations and streamline integration with Tibco-based messaging systems",
+        "Engineered backend service components in Java, implementing a fluent interface using method chaining for modular, readable, and testable code",
+        "Built structured data logging systems using XML, enabling real-time traceability and debugging of multi-stage processing flows in financial trade executions",
+        "Developed reusable service modules to intercept and validate Tibco protocol messages, improving transparency and reliability in trading pipelines",
+        "Collaborated with trading system architects and platform engineers to align component interfaces and ensure consistent message flow validation across distributed systems"
+      ]
+    }
+  ],
+  "history_truncation": {
+    "exclude_companies": ["Zyme Solutions", "Zyme Solutions Pvt Ltd", "Wipro", "Wipro Limited"],
+    "exclude_before": "Nov 2012",
+    "note": "Do not include any work experience that started before Nov 2012. Zyme Solutions and Wipro must NEVER appear."
+  },
+  "instructions": "IMPORTANT: Include PayPal experience (Mar 2020 - Aug 2021) between Ancestry and Proofpoint. Show Altimetrik as parent company for Intuit, Ancestry, PayPal. Emphasize CoE and POC work. Include older_experience entries (Altimetrik-Intuit Jan 2014-Jan 2019, Barclays Nov 2012-Dec 2013) verbatim. NEVER include Zyme Solutions or Wipro."
 }
 
