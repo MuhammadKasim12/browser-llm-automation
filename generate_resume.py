@@ -226,6 +226,8 @@ CRITICAL EXPERIENCE INSTRUCTIONS (MUST FOLLOW):
 4. Apply all DATE CORRECTIONS listed above (e.g., Citi ends Jun 2025, NOT Present)
 5. Order all other experiences in reverse chronological order (most recent first)
 6. DO NOT invent or duplicate experiences - only use what's in the resume + the additions above
+7. INCLUDE ALL bullet points listed for the CURRENT ROLE above - do not summarize, condense, or omit any of them
+8. PRESERVE the FULL text of every bullet point exactly as a complete sentence ending with proper punctuation - do not abbreviate, shorten, or drop trailing words/letters
 """
 
     prompt = f"""{brand_context}
@@ -326,7 +328,7 @@ Return ONLY valid JSON, no other text."""
             {"role": "system", "content": prompt},
             {"role": "user", "content": f"Job: {job_title} at {company}\n\nJob Description:\n{job_description}\n\nResume:\n{resume_content}"}
         ],
-        "max_tokens": 8000,
+        "max_tokens": 12000,
         "temperature": 0.5
     }
 
