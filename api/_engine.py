@@ -156,15 +156,6 @@ def _build_prompt(job_title: str, company: str, job_description: str, resume_con
         role_selection = current_role_config.get("role_selection", {})
         selected_client = role_selection.get(role_type, selected_client)
 
-        # Company-name override: if applying to a company that matches a client
-        # entry verbatim (case-insensitive), surface that client's experience
-        # regardless of role_type-based default.
-        company_norm = (company or "").strip().lower()
-        for client in exp.get("clients", []):
-            if client.get("name", "").strip().lower() == company_norm:
-                selected_client = client.get("name")
-                break
-
         for client in exp.get("clients", []):
             if client.get("name") == selected_client:
                 current_experience_text = f"""
@@ -455,9 +446,45 @@ def sort_experience_by_date(experience_list: list) -> list:
 
 
 
-def _detect_role_type(job_title: str) -> str:
-    t = (job_title or "").lower()
-    if any(kw in t for kw in ("qa", "quality", "sdet", "test", "automation")):
+# Keyword sets for JD-based role classification. Title matches are weighted
+# heavier than JD-body matches (titles are more deterministic).
+_QA_KEYWORDS = (
+    "qa", "quality", "sdet", "test automation", "test framework",
+    "automation engineer", "test engineer", "quality engineer",
+    "selenium", "cypress", "playwright", "appium", "testng", "pytest",
+    "regression", "end-to-end test", "e2e test", "integration test",
+    "unit test", "test plan", "test case", "test strategy", "test coverage",
+    "defect", "bug triage", "qe", "tdd", "bdd", "cucumber",
+)
+_DEV_KEYWORDS = (
+    "software engineer", "backend", "back-end", "frontend", "front-end",
+    "full stack", "fullstack", "microservices", "api design", "rest api",
+    "grpc", "spring boot", "distributed systems", "scalability",
+    "system design", "design patterns", "kubernetes", "feature development",
+    "build features", "ship features", "product engineer", "platform engineer",
+    "services platform", "developer", "sdk", "library", "framework design",
+    "architecture", "data pipeline", "low-latency",
+)
+
+
+def _score_keywords(text: str, keywords: tuple) -> int:
+    return sum(1 for kw in keywords if kw in text)
+
+
+def _detect_role_type(job_title: str, job_description: str = "") -> str:
+    """Pick role_type by scoring QA vs developer signals across title + JD.
+
+    Title hits count 3x (titles are highly deterministic); JD body hits count 1x.
+    QA wins ties only when QA explicitly appears in the title; otherwise the
+    development variant is preferred.
+    """
+    title = (job_title or "").lower()
+    body = (job_description or "").lower()
+
+    qa_score = 3 * _score_keywords(title, _QA_KEYWORDS) + _score_keywords(body, _QA_KEYWORDS)
+    dev_score = 3 * _score_keywords(title, _DEV_KEYWORDS) + _score_keywords(body, _DEV_KEYWORDS)
+
+    if qa_score > dev_score:
         return "qa_engineer"
     return "software_engineer"
 
@@ -520,7 +547,7 @@ def generate_resume_json(
     Tries preferred provider first; on 429/rate-limit, falls through to the
     next provider with an API key configured. Other errors abort immediately.
     """
-    role_type = _detect_role_type(job_title)
+    role_type = _detect_role_type(job_title, job_description)
     if current_role_config is None:
         current_role_config = find_current_role_config()
 

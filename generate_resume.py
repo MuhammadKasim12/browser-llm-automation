@@ -117,13 +117,31 @@ def get_structured_resume(job_title: str, company: str, job_description: str, re
         with open(current_role_path) as f:
             current_role_config = json.load(f)
 
-    # Determine role type based on job title
-    job_title_lower = job_title.lower()
-    role_type = "software_engineer"  # default
-    if any(kw in job_title_lower for kw in ['qa', 'quality', 'sdet', 'test', 'automation']):
-        role_type = "qa_engineer"
+    # Score JD content (title weighted 3x) to pick development vs QA variant.
+    qa_keywords = (
+        'qa', 'quality', 'sdet', 'test automation', 'test framework',
+        'automation engineer', 'test engineer', 'quality engineer',
+        'selenium', 'cypress', 'playwright', 'appium', 'testng', 'pytest',
+        'regression', 'end-to-end test', 'e2e test', 'integration test',
+        'unit test', 'test plan', 'test case', 'test strategy', 'test coverage',
+        'defect', 'bug triage', 'qe', 'tdd', 'bdd', 'cucumber',
+    )
+    dev_keywords = (
+        'software engineer', 'backend', 'back-end', 'frontend', 'front-end',
+        'full stack', 'fullstack', 'microservices', 'api design', 'rest api',
+        'grpc', 'spring boot', 'distributed systems', 'scalability',
+        'system design', 'design patterns', 'kubernetes', 'feature development',
+        'build features', 'ship features', 'product engineer', 'platform engineer',
+        'services platform', 'developer', 'sdk', 'library', 'framework design',
+        'architecture', 'data pipeline', 'low-latency',
+    )
+    title_l = (job_title or '').lower()
+    body_l = (job_description or '').lower()
+    qa_score = 3 * sum(1 for kw in qa_keywords if kw in title_l) + sum(1 for kw in qa_keywords if kw in body_l)
+    dev_score = 3 * sum(1 for kw in dev_keywords if kw in title_l) + sum(1 for kw in dev_keywords if kw in body_l)
+    role_type = 'qa_engineer' if qa_score > dev_score else 'software_engineer'
 
-    print(f"🎯 Role type detected: {role_type} (default {'Apple' if role_type == 'qa_engineer' else 'Intuit'} experience; may be overridden by company name)")
+    print(f"🎯 Role type detected: {role_type} (qa_score={qa_score} dev_score={dev_score}); using {'Apple' if role_type == 'qa_engineer' else 'Intuit'} experience")
 
     # Build current experience text based on role type
     current_experience_text = ""
@@ -132,15 +150,6 @@ def get_structured_resume(job_title: str, company: str, job_description: str, re
         exp = current_role_config.get('current_experience', {})
         role_selection = current_role_config.get('role_selection', {})
         selected_client = role_selection.get(role_type, 'Intuit')
-
-        # Company-name override: if applying to a company that matches a client
-        # entry verbatim (case-insensitive), surface that client's experience
-        # regardless of role_type-based default.
-        company_norm = (company or '').strip().lower()
-        for client in exp.get('clients', []):
-            if client.get('name', '').strip().lower() == company_norm:
-                selected_client = client.get('name')
-                break
 
         # Find the matching client from current experience
         for client in exp.get('clients', []):
