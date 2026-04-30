@@ -30,7 +30,15 @@ LLM_PROVIDERS = {
         "model": "meta-llama/llama-3.3-70b-instruct:free",
         "env_key": "OPENROUTER_API_KEY",
     },
+    "mistral": {
+        "name": "Mistral",
+        "url": "https://api.mistral.ai/v1/chat/completions",
+        "model": "mistral-large-latest",
+        "env_key": "MISTRAL_API_KEY",
+    },
 }
+
+_DEFAULT_PROVIDER_ORDER = ("groq", "cerebras", "openrouter", "mistral")
 
 PERSONAL_BRAND = {
     "profile_snapshot": {
@@ -58,16 +66,16 @@ class LLMError(RuntimeError):
     pass
 
 
-def get_llm_config(preferred: Optional[str] = None, order: Iterable[str] = ("groq", "cerebras", "openrouter")) -> dict:
+def get_llm_config(preferred: Optional[str] = None, order: Iterable[str] = _DEFAULT_PROVIDER_ORDER) -> dict:
     """Pick a provider whose API key is set. `preferred` (or LLM_PROVIDER env) wins if its key exists."""
     chain = get_llm_config_chain(preferred=preferred, order=order)
     if not chain:
-        raise LLMError("No API key found. Set CEREBRAS_API_KEY, GROQ_API_KEY, or OPENROUTER_API_KEY.")
+        raise LLMError("No API key found. Set CEREBRAS_API_KEY, GROQ_API_KEY, OPENROUTER_API_KEY, or MISTRAL_API_KEY.")
     return chain[0]
 
 
 def get_llm_config_chain(preferred: Optional[str] = None,
-                         order: Iterable[str] = ("groq", "cerebras", "openrouter")) -> list:
+                         order: Iterable[str] = _DEFAULT_PROVIDER_ORDER) -> list:
     """Return ALL providers with API keys set, in fallback order (preferred first)."""
     candidates = list(order)
     env_pref = os.environ.get("LLM_PROVIDER", "").lower().strip() or None
@@ -394,7 +402,7 @@ def _call_one_provider(cfg: dict, prompt: str, job_title: str, company: str,
         "max_tokens": 8000,
         "temperature": 0.5,
     }
-    if cfg["provider"] in ("groq", "cerebras"):
+    if cfg["provider"] in ("groq", "cerebras", "mistral"):
         payload["response_format"] = {"type": "json_object"}
 
     resp = requests.post(cfg["url"], headers=headers, json=payload, timeout=120)
@@ -444,7 +452,7 @@ def generate_resume_json(
                            current_role_config, role_type)
     chain = get_llm_config_chain(preferred=preferred_provider)
     if not chain:
-        raise LLMError("No API key found. Set CEREBRAS_API_KEY, GROQ_API_KEY, or OPENROUTER_API_KEY.")
+        raise LLMError("No API key found. Set CEREBRAS_API_KEY, GROQ_API_KEY, OPENROUTER_API_KEY, or MISTRAL_API_KEY.")
 
     last_error: Optional[LLMError] = None
     for idx, cfg in enumerate(chain):
