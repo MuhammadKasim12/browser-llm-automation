@@ -15,7 +15,7 @@ LLM_PROVIDERS = {
     "cerebras": {
         "name": "Cerebras",
         "url": "https://api.cerebras.ai/v1/chat/completions",
-        "model": "llama-3.3-70b",
+        "model": "qwen-3-235b-a22b-instruct-2507",
         "env_key": "CEREBRAS_API_KEY",
     },
     "groq": {
