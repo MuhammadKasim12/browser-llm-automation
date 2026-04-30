@@ -99,9 +99,25 @@ def get_llm_config_chain(preferred: Optional[str] = None,
 
 
 def _is_rate_limit_error(msg: str) -> bool:
+    """True if the error is transient/retryable on a different provider.
+
+    Covers explicit rate limits (429/quota/TPM) plus transient upstream
+    failures from any provider (OpenRouter 'Provider returned error',
+    Cerebras queue overflows, generic 5xx) that another provider may
+    successfully answer. Auth/config errors (401/403/model-not-found)
+    intentionally still abort the chain.
+    """
     m = (msg or "").lower()
-    return any(s in m for s in ("rate limit", "ratelimit", "429", "too many requests",
-                                 "quota", "tpm", "tokens per minute", "rpm"))
+    if any(s in m for s in ("rate limit", "ratelimit", "429", "too many requests",
+                             "quota", "tpm", "tokens per minute", "rpm",
+                             "queue_exceeded", "queue exceeded")):
+        return True
+    if any(s in m for s in ("provider returned error", "service unavailable",
+                             "internal server error", "bad gateway",
+                             "gateway timeout", "upstream", "503", "502", "504",
+                             "timed out", "timeout")):
+        return True
+    return False
 
 
 def find_current_role_config() -> Optional[dict]:
