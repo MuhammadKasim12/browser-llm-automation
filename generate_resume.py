@@ -228,6 +228,8 @@ CRITICAL EXPERIENCE INSTRUCTIONS (MUST FOLLOW):
 6. DO NOT invent or duplicate experiences - only use what's in the resume + the additions above
 7. INCLUDE ALL bullet points listed for the CURRENT ROLE above - do not summarize, condense, or omit any of them
 8. PRESERVE the FULL text of every bullet point exactly as a complete sentence ending with proper punctuation - do not abbreviate, shorten, or drop trailing words/letters
+9. The CURRENT ROLE's "company" field MUST be EXACTLY: "Galaxy I Tech (Contract) - Client: {selected_client}" - DO NOT split the client into the location field, DO NOT drop the "Client: {selected_client}" suffix
+10. Every job's "location" field MUST be a geographic location only (e.g. "San Jose, CA", "SF Bay Area", "San Francisco, CA"). It MUST NEVER contain any date, year, month, ISO timestamp, or date range. Dates ALWAYS go in the "dates" field, never in "location"
 """
 
     prompt = f"""{brand_context}
@@ -251,8 +253,8 @@ Analyze the resume and job description, then return a JSON object with this EXAC
     "experience": [
         {{
             "title": "Job Title",
-            "company": "Company Name",
-            "location": "City, State",
+            "company": "Company Name (full string, including any '- Client: X' suffix)",
+            "location": "City, State (geographic location ONLY - never a date, year, or month)",
             "dates": "MMM YYYY - MMM YYYY",
             "points": [
                 "First bullet point showing problem-first thinking with metrics",
