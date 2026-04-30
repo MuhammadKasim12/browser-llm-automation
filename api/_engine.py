@@ -156,6 +156,15 @@ def _build_prompt(job_title: str, company: str, job_description: str, resume_con
         role_selection = current_role_config.get("role_selection", {})
         selected_client = role_selection.get(role_type, selected_client)
 
+        # Company-name override: if applying to a company that matches a client
+        # entry verbatim (case-insensitive), surface that client's experience
+        # regardless of role_type-based default.
+        company_norm = (company or "").strip().lower()
+        for client in exp.get("clients", []):
+            if client.get("name", "").strip().lower() == company_norm:
+                selected_client = client.get("name")
+                break
+
         for client in exp.get("clients", []):
             if client.get("name") == selected_client:
                 current_experience_text = f"""
@@ -171,7 +180,12 @@ Points:
                 break
 
         missing_exp = current_role_config.get("missing_experience", {})
-        paypal_key = f"PayPal_{'QE' if role_type == 'qa_engineer' else 'SWE'}"
+        # Derive effective role_type from the selected client so a company-name
+        # override (e.g. company=Apple -> Apple QE client) also picks the
+        # matching PayPal variant (QE vs SWE).
+        inverse_selection = {v: k for k, v in role_selection.items()}
+        effective_role_type = inverse_selection.get(selected_client, role_type)
+        paypal_key = f"PayPal_{'QE' if effective_role_type == 'qa_engineer' else 'SWE'}"
         if paypal_key in missing_exp:
             paypal = missing_exp[paypal_key]
             current_experience_text += f"""

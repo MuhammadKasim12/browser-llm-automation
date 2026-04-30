@@ -123,7 +123,7 @@ def get_structured_resume(job_title: str, company: str, job_description: str, re
     if any(kw in job_title_lower for kw in ['qa', 'quality', 'sdet', 'test', 'automation']):
         role_type = "qa_engineer"
 
-    print(f"🎯 Role type detected: {role_type} (using {'Apple' if role_type == 'qa_engineer' else 'Intuit'} experience)")
+    print(f"🎯 Role type detected: {role_type} (default {'Apple' if role_type == 'qa_engineer' else 'Intuit'} experience; may be overridden by company name)")
 
     # Build current experience text based on role type
     current_experience_text = ""
@@ -132,6 +132,15 @@ def get_structured_resume(job_title: str, company: str, job_description: str, re
         exp = current_role_config.get('current_experience', {})
         role_selection = current_role_config.get('role_selection', {})
         selected_client = role_selection.get(role_type, 'Intuit')
+
+        # Company-name override: if applying to a company that matches a client
+        # entry verbatim (case-insensitive), surface that client's experience
+        # regardless of role_type-based default.
+        company_norm = (company or '').strip().lower()
+        for client in exp.get('clients', []):
+            if client.get('name', '').strip().lower() == company_norm:
+                selected_client = client.get('name')
+                break
 
         # Find the matching client from current experience
         for client in exp.get('clients', []):
@@ -148,9 +157,11 @@ Points:
 """
                 break
 
-        # Add missing PayPal experience based on role type
+        # Add missing PayPal experience based on effective role type
         missing_exp = current_role_config.get('missing_experience', {})
-        paypal_key = f"PayPal_{'QE' if role_type == 'qa_engineer' else 'SWE'}"
+        inverse_selection = {v: k for k, v in role_selection.items()}
+        effective_role_type = inverse_selection.get(selected_client, role_type)
+        paypal_key = f"PayPal_{'QE' if effective_role_type == 'qa_engineer' else 'SWE'}"
         if paypal_key in missing_exp:
             paypal = missing_exp[paypal_key]
             current_experience_text += f"""
