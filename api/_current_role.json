@@ -95,6 +95,73 @@
       }
     }
   },
+  "middle_experience": [
+    {
+      "company": "Citi (Contract)",
+      "title": "Module Lead",
+      "location": "SF Bay Area",
+      "dates": "Oct 2024 - Jun 2025",
+      "points": [
+        "Led a cross-functional module team in the development and end-to-end testing of scalable microservices using Spring Boot, ensuring on-time delivery of high-quality software components",
+        "Designed and built robust automation frameworks in Java, Python, and JavaScript, increasing test coverage and reducing regression testing time by 40%",
+        "Championed the integration of Apache Kafka for real-time event-driven testing and message validation, enhancing test data reliability across distributed systems",
+        "Established and maintained CI/CD pipelines using Jenkins, GitLab CI, and Docker, enabling faster and consistent delivery with reduced manual intervention",
+        "Introduced AI-driven solutions for test automation, leveraging NLP-based models to convert user stories into executable test cases, reducing manual scripting by 60%"
+      ]
+    },
+    {
+      "company": "LPL Financial (Contract)",
+      "title": "Lead Software Engineer",
+      "location": "SF Bay Area",
+      "dates": "Oct 2023 - Sep 2024",
+      "points": [
+        "Spearheaded the development and testing of microservices using Spring Boot, significantly improving system scalability and performance",
+        "Architected and implemented automation frameworks using Java, Python, and JavaScript, enhancing test efficiency by 40%",
+        "Integrated Kafka for real-time data processing and messaging, ensuring reliable and efficient system communication",
+        "Developed and maintained CI/CD pipelines with Jenkins and Docker, resulting in a 50% faster deployment cycle",
+        "Leveraged AI/ML to automate test script generation based on user prompts, significantly reducing manual effort"
+      ]
+    },
+    {
+      "company": "Amazon",
+      "title": "Senior Software Engineer",
+      "location": "San Francisco, CA",
+      "dates": "Sep 2022 - Oct 2023",
+      "points": [
+        "Designed and developed high-throughput backend frameworks using Java EE, Spring, and Spring Boot, optimizing microservices for handling millions of daily transactions",
+        "Built and maintained frontend testing utilities to validate data visualization and dashboard consistency across modern browsers, ensuring end-to-end quality",
+        "Developed and optimized tools for functional, integration, and system testing, driving improvements in application performance and stability",
+        "Integrated with AWS-based infrastructure and services such as S3, Lambda, and CloudWatch to monitor test pipelines and application metrics",
+        "Collaborated cross-functionally with frontend developers, backend engineers, and DevOps teams to ensure seamless deployment and validation through CI/CD pipelines"
+      ]
+    },
+    {
+      "company": "Tusimple",
+      "title": "Senior Software Engineer",
+      "location": "San Diego, CA",
+      "dates": "Mar 2022 - Sep 2022",
+      "points": [
+        "Developed and optimized full-stack test automation frameworks using Cucumber/Gherkins, enhancing collaboration between frontend/backend teams and improving test efficiency by 45%",
+        "Automated both browser-based UI tests (Selenium, Cypress) and REST API validations, ensuring seamless integration across frontend and backend modules",
+        "Implemented end-to-end CI/CD pipelines with Jenkins and Docker, enabling automated builds, deployments, and validations across staging and production environments",
+        "Integrated Apache Kafka for real-time messaging and data pipeline validation, ensuring reliable communication between distributed services and microservices",
+        "Mentored junior engineers in test architecture, CI/CD integration, and coding best practices, fostering a strong engineering culture of quality and automation"
+      ]
+    },
+    {
+      "company": "Proofpoint Inc",
+      "title": "Senior Software Engineer",
+      "location": "Sunnyvale, CA",
+      "dates": "Aug 2021 - Mar 2022",
+      "points": [
+        "Contributed to the design and development of cloud-native enterprise applications, ensuring robust integration across frontend, backend, and distributed data platforms",
+        "Developed modular components and microservices using Java, and built interactive UI components using JavaScript, enabling seamless user experience and backend connectivity",
+        "Created CLI tools and services using Shell Scripting to manage and orchestrate job pipelines, improving developer efficiency and operational automation",
+        "Engineered large-scale data validation and transformation pipelines using Apache Spark and Scala, ensuring reliability in real-time data processing and reporting workflows",
+        "Enhanced system scalability and performance by analyzing backend logs, optimizing service interactions, and improving API response times"
+      ]
+    }
+  ],
   "older_experience": [
     {
       "company": "Altimetrik - Client: Intuit",

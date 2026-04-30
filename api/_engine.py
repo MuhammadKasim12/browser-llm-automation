@@ -206,10 +206,9 @@ ALTIMETRIK CONTEXT:
 - {coe.get('role', '')}
 """
 
-        older_experience = current_role_config.get("older_experience", [])
-        if older_experience:
+        def _render_experience_blocks(entries):
             blocks = []
-            for entry in older_experience:
+            for entry in entries:
                 bullets = chr(10).join('• ' + p for p in entry.get('points', []))
                 blocks.append(
                     f"Company: {entry.get('company')}\n"
@@ -218,9 +217,21 @@ ALTIMETRIK CONTEXT:
                     f"Dates: {entry.get('dates')}\n"
                     f"Points:\n{bullets}"
                 )
+            return "\n\n".join(blocks)
+
+        middle_experience = current_role_config.get("middle_experience", [])
+        if middle_experience:
+            current_experience_text += (
+                "\n\nMIDDLE EXPERIENCE (MUST INCLUDE EVERY ENTRY - reverse-chronological after PayPal/Ancestry):\n"
+                + _render_experience_blocks(middle_experience)
+                + "\n"
+            )
+
+        older_experience = current_role_config.get("older_experience", [])
+        if older_experience:
             current_experience_text += (
                 "\n\nOLDER EXPERIENCE (MUST INCLUDE - APPEND AFTER ANCESTRY IN CHRONOLOGICAL ORDER):\n"
-                + "\n\n".join(blocks)
+                + _render_experience_blocks(older_experience)
                 + "\n"
             )
 
@@ -276,7 +287,7 @@ CRITICAL EXPERIENCE INSTRUCTIONS (MUST FOLLOW):
 8. PRESERVE the FULL text of every bullet point exactly as a complete sentence ending with proper punctuation - do not abbreviate, shorten, or drop trailing words/letters
 9. The CURRENT ROLE's "company" field MUST be EXACTLY: "Galaxy I Tech (Contract) - Client: {selected_client}" - DO NOT split the client into the location field, DO NOT drop the "Client: {selected_client}" suffix
 10. Every job's "location" field MUST be a geographic location only (e.g. "San Jose, CA", "SF Bay Area", "San Francisco, CA"). It MUST NEVER contain any date, year, month, ISO timestamp, or date range. Dates ALWAYS go in the "dates" field, never in "location"
-11. INCLUDE every entry from the OLDER EXPERIENCE block above verbatim (company, title, location, dates exactly as provided) - do NOT collapse, merge, rename, or skip any of them
+11. INCLUDE every entry from the MIDDLE EXPERIENCE and OLDER EXPERIENCE blocks above verbatim (company, title, location, dates exactly as provided) - do NOT collapse, merge, rename, drop, or skip any of them. The final experience array MUST contain at minimum: 1 current + every middle_experience entry + Ancestry + PayPal + every older_experience entry
 12. ENFORCE the HISTORY TRUNCATION rules: never include excluded companies (e.g. Zyme Solutions, Wipro), never include any role that started before the exclude_before date, and never invent a company that is not present in the resume or in the explicit blocks above
 """
 
